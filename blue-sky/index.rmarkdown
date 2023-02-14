@@ -1,0 +1,78 @@
+---
+title: "E1"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+library(tictoc)
+library(tidyverse)
+```
+
+```{r}
+for (f in list.files(pattern="[function_]*\\.R$")){
+  source(f)
+}
+```
+
+```{r, tic, include=FALSE}
+tic()
+```
+
+```{r collate_pickles}
+pickles_tibble <- 
+  read_pickles(
+    lazily_load_from_existing_rds_file = TRUE
+    )
+```
+
+```{r, toc, echo=FALSE}
+toc()
+```
+
+```{r clean_pickles}
+pickles_postprocessed <- 
+  pickles_tibble %>% 
+  clean_pickles()
+```
+
+
+Currently the sata are sparse: not every cell of the full desihgn is represented.
+
+
+```{r}
+data <- pickles_postprocessed
+
+design <- expand_grid(
+  subject = as_factor(sort(seq_along(unique(data$subject)))),
+  condition = as_factor(levels(data$condition)),
+  trial = as_factor(levels(data$trial)),
+  fruit = as_factor(0:10))
+```
+
+
+Merge with the full design. 
+
+
+```{r}
+data <- merge_with_design(design, data)
+```
+
+
+Calculate trial duration .
+
+
+```{r}
+# - calculate trial duration before removing any samples
+data <- data %>% 
+  group_by(subject, condition, trial) %>% 
+  mutate(dur = max(time, na.rm=TRUE) - min(time, na.rm=TRUE)) %>% 
+  select(subject, condition, trial, dur, everything())
+```
+
+
+**Collapse and Remove**
+
+

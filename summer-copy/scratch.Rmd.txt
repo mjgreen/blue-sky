@@ -1,0 +1,83 @@
+e2_ntrees_CONDITION_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(resources, stage, fading) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage)) 
+e2_ntrees_CONDITION_MEANS_TABLE <- 
+  e2_ntrees_CONDITION_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>% 
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_CONDITION_MEANS_TABLE, filename="e2_tables/e2_ntrees_CONDITION_MEANS_TABLE.png")
+
+e2_ntrees_RESOURCES_FADING_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(resources, fading) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_RESOURCES_FADING_MEANS_TABLE <-
+  e2_ntrees_RESOURCES_FADING_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>% 
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_RESOURCES_FADING_MEANS_TABLE, filename="e2_tables/e2_ntrees_RESOURCES_FADING_MEANS_TABLE.png")
+
+e2_ntrees_RESOURCES_STAGE_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(resources, stage) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_RESOURCES_STAGE_MEANS_TABLE <-
+  e2_ntrees_RESOURCES_STAGE_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>% 
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_RESOURCES_STAGE_MEANS_TABLE, filename="e2_tables/e2_ntrees_RESOURCES_STAGE_MEANS_TABLE.png")
+
+e2_ntrees_STAGE_FADING_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(stage, fading) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_STAGE_FADING_MEANS_TABLE <-
+  e2_ntrees_STAGE_FADING_MEANS %>% 
+  ungroup() %>%
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>%
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_STAGE_FADING_MEANS_TABLE, "e2_tables/e2_ntrees_STAGE_FADING_MEANS_TABLE.png")
+
+e2_ntrees_RESOURCES_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(resources) %>%
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_RESOURCES_MEANS_TABLE <-
+  e2_ntrees_RESOURCES_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>%  
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_RESOURCES_MEANS_TABLE, "e2_tables/e2_ntrees_RESOURCES_MEANS_TABLE.png")
+
+e2_ntrees_STAGE_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(stage) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_STAGE_MEANS_TABLE <-
+  e2_ntrees_STAGE_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>%  
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_STAGE_MEANS_TABLE, filename="e2_tables/e2_ntrees_STAGE_MEANS_TABLE.png")
+
+e2_ntrees_FADING_MEANS <-
+  e2_ntrees_PARTICIPANT_MEANS %>% 
+  group_by(fading) %>% 
+  summarise(mean = mean(mean_ntrees_per_stage), sd = sd(mean_ntrees_per_stage))
+e2_ntrees_FADING_MEANS_TABLE <-
+  e2_ntrees_FADING_MEANS %>% 
+  ungroup() %>% 
+  gt() %>% 
+  fmt_number(columns = c("mean","sd"), decimals=2) %>%  
+  tab_header("Number of trees")
+gtsave(data=e2_ntrees_FADING_MEANS_TABLE, filename="e2_tables/e2_ntrees_FADING_MEANS_TABLE.png")

@@ -1,0 +1,99 @@
+# Retrieval Rate
+
+Experiment 1
+
+```{r e1_retrievalrate_setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.path='e1_figures/')
+knitr::opts_chunk$set(fig.width=7, fig.height=5)
+options(dplyr.summarise.inform=F)
+library(tidyverse)
+library(ez)
+library(gt)
+
+e1 <- readRDS("fgms_e1_allsubs.rds")
+
+e1_retrievalrate <-
+  e1 %>%
+  transmute(
+    pid          = pid,
+    trial        = trial_in_block, # is 1 to 10 for each condition of "resources"
+    resources    = R,
+    stage        = as_factor(ifelse(trial<=5, "early", "late")),
+    index        = index,
+    tree         = tile,
+    basket       = basket,
+    ntrees_to_get_a_fruit = ntreesperfruit)
+
+e1_retrievalrate_BASKET_VALUES <- 
+  e1_retrievalrate %>% 
+  group_by(pid, resources, trial, basket) %>% 
+  summarise(
+    ntrees_to_get_a_fruit = mean(ntrees_to_get_a_fruit, na.rm=TRUE)
+    ) 
+
+e1_retrievalrate_PARTICIPANT_MEANS <-
+  e1_retrievalrate_BASKET_VALUES %>% 
+  group_by(pid, resources, basket) %>% 
+  summarise(mean_ntrees_to_get_a_fruit_per_fruit = mean(ntrees_to_get_a_fruit)) %>% 
+  # remove NaNs for number of fruit of 0
+  na.omit() %>% 
+  # force basket to be a factor
+  mutate(basket = as_factor(basket))
+
+options(contrasts=c("contr.sum","contr.poly"))
+e1_retrievalrate_ANOVA <- 
+  ezANOVA(data=e1_retrievalrate_PARTICIPANT_MEANS,
+          dv=mean_ntrees_to_get_a_fruit_per_fruit,
+          wid=pid,
+          within=c(resources,basket),
+          type=3)
+
+e1_retrievalrate_ANOVA_TABLE <-
+  e1_retrievalrate_ANOVA$ANOVA %>% 
+  select(-ges) %>% 
+  gt() %>% 
+  tab_header(
+    title="Retrieval Rate",
+    subtitle = "ANOVA table"
+  ) %>% 
+  fmt_number(
+    columns = c("F"),
+    rows=everything(),
+    decimals=2
+  )  %>% 
+  fmt_number(
+    columns = c("p"),
+    rows=everything(),
+    decimals=3
+  ) %>% 
+  cols_align(
+    columns=`p<.05`,
+    align="c"
+  )
+gtsave(e1_retrievalrate_ANOVA_TABLE, "e1_tables/e1_retrievalrate_ANOVA.png")
+
+# Ten points along the x axis, each participant contributes one point per cell
+e1_retrievalrate_PLOT10 <-
+  ggplot(
+  data=e1_retrievalrate_PARTICIPANT_MEANS, 
+  aes(x=basket, y=mean_ntrees_to_get_a_fruit_per_fruit, group=resources, pch=resources, fill=resources)
+) +
+  theme_bw()+
+  theme(aspect.ratio = 1, panel.grid=element_blank())+
+  scale_fill_manual(values=c("white", "black")) +
+  scale_shape_manual(values=c(24,19)) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.2, position=position_dodge(0.25)) +
+  stat_summary(fun = mean, geom = "line", position=position_dodge(0.25)) + 
+  stat_summary(fun = mean, geom = "point", size=3, position=position_dodge(0.25))
+ggsave("e1_plots/e1_retrievalrate_PLOT10.png")
+```
+
+```{r out.width="50%"}
+knitr::include_graphics("e1_tables/e1_retrievalrate_ANOVA.png")
+```
+
+```{r out.width="75%"}
+knitr::include_graphics("e1_plots/e1_retrievalrate_PLOT10.png")
+```
+

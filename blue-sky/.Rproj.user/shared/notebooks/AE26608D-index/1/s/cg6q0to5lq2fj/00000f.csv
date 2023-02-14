@@ -1,0 +1,7 @@
+"0","data <- pickles_postprocessed"
+"0",""
+"0","design <- expand_grid("
+"0","  subject = as_factor(sort(seq_along(unique(data$subject)))),"
+"0","  condition = as_factor(levels(data$condition)),"
+"0","  trial = as_factor(levels(data$trial)),"
+"0","  fruit = as_factor(0:10))"

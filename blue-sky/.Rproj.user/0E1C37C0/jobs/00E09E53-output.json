@@ -1,0 +1,7 @@
+[2,"\n"]
+[1,"\r\n\r\nprocessing file: blue-sky.qmd\r\n\r  |                                                          \r  |                                                    |   0%\r  |                                                          \r  |.................                                   |  33%"]
+[1,"                  \r  |                                                          \r  |...................................                 |  67% (unnamed-chunk-1)"]
+[1,"\r  |                                                          \r  |....................................................| 100%                  \r                                                                                                            \r\noutput file: blue-sky.knit.md\r\n\r\n"]
+[1,"pandoc \n  to: html\n  output-file: blue-sky.html\n  standalone: true\n  section-divs: true\n  html-math-method: mathjax\n  wrap: none\n  default-image-extension: png\n  \nmetadata\n  document-css: false\n  link-citations: true\n  date-format: long\n  lang: en\n  title: Blue Sky\n  author: Matt\n  editor: visual\n  \n"]
+[1,"Output created: blue-sky.html\n\nWatching files for changes\n"]
+[1,"Browse at http://localhost:7012/\n"]

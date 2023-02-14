@@ -1,0 +1,14 @@
+{
+  "hash": "17d92f3fe4efc04cd5edef3e2ff9e642",
+  "result": {
+    "markdown": "---\ntitle: \"E1\"\noutput: html_document\ndate: \"2023-02-04\"\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nfor (f in list.files(pattern=\"[function_]*\\\\.R$\")){\n  source(f)\n}\n```\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npickles_tibble <- \n  read_pickles(\n    lazily_load_from_existing_rds_file = TRUE\n    )\n```\n:::\n\n::: {.cell}\n::: {.cell-output .cell-output-stdout}\n```\n0.13 sec elapsed\n```\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\npickles_postprocessed <- \n  pickles_tibble %>% \n  clean_pickles()\n```\n:::\n\n\nCurrently the sata are sparse: not every cell of the full desihgn is represented.\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- pickles_postprocessed\n\ndesign <- expand_grid(\n  subject = as_factor(sort(seq_along(unique(data$subject)))),\n  condition = as_factor(levels(data$condition)),\n  trial = as_factor(levels(data$trial)),\n  fruit = as_factor(0:10))\n```\n:::\n\n\nMerge with the full design. \n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- merge_with_design(design, data)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\nJoining, by = c(\"subject\", \"condition\", \"trial\", \"fruit\")\n```\n:::\n:::\n\n\nCalculate trial duration .\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# - calculate trial duration before removing any samples\ndata <- data %>% \n  group_by(subject, condition, trial) %>% \n  mutate(dur = max(time, na.rm=TRUE) - min(time, na.rm=TRUE)) %>% \n  select(subject, condition, trial, dur, everything())\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

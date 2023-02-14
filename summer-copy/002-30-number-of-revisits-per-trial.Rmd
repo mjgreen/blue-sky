@@ -1,0 +1,94 @@
+# Number of Revisits per Trial
+
+Experiment 2
+
+```{r e2_nrevisitspertrial_setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(fig.path='e2_figures/')
+knitr::opts_chunk$set(fig.width=7, fig.height=5)
+options(dplyr.summarise.inform=F)
+library(tidyverse)
+library(ez)
+library(gt)
+
+e2 <- readRDS("fgms_e2_allsubs.rds")
+
+e2_nrevisitspertrial <-
+  e2 %>%
+  transmute(
+    pid          = as_factor(pid),
+    trial        = trial_in_block,
+    resources    = R,
+    fading       = V,
+    stage        = as_factor(ifelse(trial_in_block<=10, "early", "late")),
+    index        = index,
+    is_revisit   = revisit)
+
+e2_nrevisitspertrial_TRIAL_SUMS <- 
+  e2_nrevisitspertrial %>% 
+  group_by(pid, resources, stage, fading, trial) %>% 
+  summarise(nrevisits=sum(is_revisit))
+
+e2_nrevisitspertrial_PARTICIPANT_MEANS <-
+  e2_nrevisitspertrial_TRIAL_SUMS %>% 
+  group_by(pid, resources, stage, fading) %>% 
+  summarise(mean_nrevisits_per_stage = mean(nrevisits))
+
+options(contrasts=c("contr.sum","contr.poly"))
+e2_nrevisitspertrial_ANOVA <- 
+  ezANOVA(data=e2_nrevisitspertrial_PARTICIPANT_MEANS,
+          dv=mean_nrevisits_per_stage,
+          wid=pid,
+          within=c(resources,stage),
+          between=fading,
+          type=3)
+
+e2_nrevisitspertrial_ANOVA_TABLE <-
+  e2_nrevisitspertrial_ANOVA$ANOVA %>% 
+  select(-ges) %>% 
+  gt() %>% 
+  tab_header(
+    title="Number of Revisits per Stage",
+    subtitle = "ANOVA table"
+  ) %>% 
+  fmt_number(
+    columns = c("F"),
+    rows=everything(),
+    decimals=2
+  )  %>% 
+  fmt_number(
+    columns = c("p"),
+    rows=everything(),
+    decimals=3
+  ) %>% 
+  cols_align(
+    columns=`p<.05`,
+    align="c"
+  )
+gtsave(e2_nrevisitspertrial_ANOVA_TABLE, "e2_tables/e2_nrevisitspertrial_ANOVA.png")
+
+# Two points along the x axis, each participant contributes one point per cell
+e2_nrevisitspertrial_PLOT2 <-
+  ggplot(
+  data=e2_nrevisitspertrial_PARTICIPANT_MEANS, 
+  aes(x=stage, y=mean_nrevisits_per_stage, group=resources, pch=resources, fill=resources)
+) +
+  facet_wrap(~fading)+
+  theme_bw()+
+  theme(aspect.ratio = 1, panel.grid=element_blank())+
+  scale_fill_manual(values=c("white", "black")) +
+  scale_shape_manual(values=c(24,19)) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.2, position=position_dodge(0.25)) +
+  stat_summary(fun = mean, geom = "line", position=position_dodge(0.25)) + 
+  stat_summary(fun = mean, geom = "point", size=3, position=position_dodge(0.25))
+ggsave("e2_plots/e2_nrevisitspertrial_PLOT2.png")
+```
+
+```{r out.width="50%"}
+knitr::include_graphics("e2_tables/e2_nrevisitspertrial_ANOVA.png")
+```
+
+```{r out.width="100%"}
+knitr::include_graphics("e2_plots/e2_nrevisitspertrial_PLOT2.png")
+```
+

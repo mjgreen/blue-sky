@@ -1,0 +1,27 @@
+{
+    "id": "0F325A5D",
+    "path": "~/gits/explore-foraging-dfs/blue-sky/function_read_pickles.R",
+    "project_path": "function_read_pickles.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1676368152802.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled2",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "39,3",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1675483464,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1675483464,
+    "read_only": false,
+    "read_only_alternatives": []
+}

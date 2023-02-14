@@ -1,0 +1,18 @@
+# (PART) Experiment One {-}
+
+# Introduction
+
+In experiment 1, the computerized gaze contingent task consisted of 20 individual trials. In each trial participants were presented with a display containing 30 trees, 15 of which contained a hidden fruit item which was the target (the target was an apple, represented by a filled red circle). On each trial, the participant’s task was to forage for and retrieve 10 of the 15 fruit items.
+
+We manipulated one factor within-subjects (Resource Distribution) with 2 levels:  'clumped' and 'random'.
+
+We created ten random stimuli in which the 15 target fruit items were uniformly distributed about the 30 trees (random condition) and ten stimuli in which all 15 target fruit items were arranged in one large patch (clumped condition) that covered either the left or the right side of the layout.
+
+
+
+<!-- This line runs the code that gets the individual participant results files in. -->
+
+<!-- ```{r e1-process-pickles, echo=TRUE, eval=TRUE} -->
+<!-- # source("e1_process_individual_results_files.R", local = knitr::knit_global()) -->
+<!-- # source("e1_process_the_combined_subjects_file.R", local = knitr::knit_global()) -->
+<!-- ``` -->
